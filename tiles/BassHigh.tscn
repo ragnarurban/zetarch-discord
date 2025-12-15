@@ -1,0 +1,31 @@
+[gd_scene load_steps=7 format=3 uid="uid://def4i15qifhc0"]
+
+[ext_resource type="Script" uid="uid://c6lw4oje3iydv" path="res://scripts/MusicTile.gd" id="1_w2ofg"]
+[ext_resource type="Shader" uid="uid://ddtvfodswg38p" path="res://tiles/Tile.gdshader" id="2_dgjlf"]
+[ext_resource type="Texture2D" uid="uid://bnla5fxkyw8ip" path="res://art/Assets/Tiles.png" id="2_u0tg2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mpaqw"]
+shader = ExtResource("2_dgjlf")
+shader_parameter/line_color = Color(0.42352942, 0.99607843, 0.972549, 1)
+shader_parameter/line_thickness = 1.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dgjlf"]
+atlas = ExtResource("2_u0tg2")
+region = Rect2(241, 352, 14, 17)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u0tg2"]
+size = Vector2(16, 16)
+
+[node name="BassHigh" type="Node2D"]
+script = ExtResource("1_w2ofg")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_mpaqw")
+position = Vector2(3, 5)
+texture = SubResource("AtlasTexture_dgjlf")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(3, 5)
+shape = SubResource("RectangleShape2D_u0tg2")

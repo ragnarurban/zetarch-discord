@@ -1,0 +1,158 @@
+[gd_scene load_steps=15 format=3 uid="uid://cxeylhmd4onja"]
+
+[ext_resource type="Script" uid="uid://bjs2o5yjpd25j" path="res://scripts/Game.gd" id="1_qbsmt"]
+[ext_resource type="Texture2D" uid="uid://cidgla3oqkmoa" path="res://art/Background/sky.png" id="2_7ua8r"]
+[ext_resource type="PackedScene" uid="uid://ch3tvarymcguc" path="res://scenes/Player.tscn" id="2_cpr0p"]
+[ext_resource type="Script" uid="uid://bk66l5wt8dtyh" path="res://scripts/Camera.gd" id="3_cpr0p"]
+[ext_resource type="Texture2D" uid="uid://bbw3l7ns3qacb" path="res://art/Background/far-clouds.png" id="3_r7sob"]
+[ext_resource type="Texture2D" uid="uid://bcnsdxg457gf4" path="res://art/Background/far-mountains.png" id="4_y5y3l"]
+[ext_resource type="Script" uid="uid://du2wn2xffahsc" path="res://scripts/fmod_event_emitter_2d.gd" id="5_400sg"]
+[ext_resource type="PackedScene" uid="uid://crt133gmvr22o" path="res://scenes/PlatformTile.tscn" id="5_s0nni"]
+[ext_resource type="Texture2D" uid="uid://nei8g3fblyr7" path="res://art/Background/near-clouds.png" id="5_vjgi4"]
+[ext_resource type="Texture2D" uid="uid://cub65x0y0ym76" path="res://art/Background/mountains.png" id="6_kyk2p"]
+[ext_resource type="Script" uid="uid://b4dpsl1cx4kqs" path="res://scripts/MusicTileSpawner.gd" id="6_qy1jj"]
+[ext_resource type="Texture2D" uid="uid://dxjs1s2ge2yl0" path="res://art/Background/trees.png" id="7_45i86"]
+[ext_resource type="Script" uid="uid://ym8ird1c3jcq" path="res://scripts/ResonanceMeter.gd" id="9_mcffj"]
+[ext_resource type="Script" uid="uid://q3elooi1s54w" path="res://scripts/MusicTileFactory.gd" id="11_3xj3m"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_qbsmt")
+
+[node name="Background" type="Node2D" parent="."]
+
+[node name="Sky" type="Parallax2D" parent="Background"]
+repeat_size = Vector2(1150, 0)
+autoscroll = Vector2(-1, 0)
+repeat_times = 3
+
+[node name="Sky" type="Sprite2D" parent="Background/Sky"]
+texture_repeat = 2
+position = Vector2(574.98114, 327.6253)
+scale = Vector2(3.6001177, 2.7364554)
+texture = ExtResource("2_7ua8r")
+
+[node name="CloudsFar" type="Parallax2D" parent="Background"]
+scroll_scale = Vector2(0.2, 0.2)
+repeat_size = Vector2(1150, 0)
+autoscroll = Vector2(-10, 0)
+repeat_times = 2
+
+[node name="CloudsFar" type="Sprite2D" parent="Background/CloudsFar"]
+position = Vector2(577.0781, 326.69864)
+scale = Vector2(8.983155, 2.7191777)
+texture = ExtResource("3_r7sob")
+
+[node name="MountainsFar" type="Parallax2D" parent="Background"]
+repeat_size = Vector2(1150, 0)
+autoscroll = Vector2(-15, 0)
+repeat_times = 2
+
+[node name="MountainsFar" type="Sprite2D" parent="Background/MountainsFar"]
+position = Vector2(576.7658, 258.49997)
+scale = Vector2(7.202927, 3.2874997)
+texture = ExtResource("4_y5y3l")
+
+[node name="CloudsClose" type="Parallax2D" parent="Background"]
+repeat_size = Vector2(1150, 0)
+autoscroll = Vector2(-20, 0)
+repeat_times = 3
+
+[node name="CloudsClose" type="Sprite2D" parent="Background/CloudsClose"]
+position = Vector2(576.35803, 365)
+scale = Vector2(8.008917, 2.4250002)
+texture = ExtResource("5_vjgi4")
+
+[node name="MountainsClose" type="Parallax2D" parent="Background"]
+repeat_size = Vector2(1150, 0)
+autoscroll = Vector2(-25, 0)
+repeat_times = 3
+
+[node name="MountainClose" type="Sprite2D" parent="Background/MountainsClose"]
+position = Vector2(575.31964, 325.97998)
+scale = Vector2(3.5980024, 2.7085)
+texture = ExtResource("6_kyk2p")
+
+[node name="Forest" type="Parallax2D" parent="Background"]
+repeat_size = Vector2(1150, 0)
+autoscroll = Vector2(-50, 0)
+repeat_times = 2
+
+[node name="Forest" type="Sprite2D" parent="Background/Forest"]
+position = Vector2(577.0908, 328.06134)
+scale = Vector2(4.799243, 2.7328222)
+texture = ExtResource("7_45i86")
+
+[node name="World" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Ground" type="Parallax2D" parent="World"]
+repeat_size = Vector2(1057, 0)
+autoscroll = Vector2(-75, 0)
+repeat_times = 2
+
+[node name="Top" parent="World/Ground" instance=ExtResource("5_s0nni")]
+position = Vector2(-1, 580)
+
+[node name="Mid" parent="World/Ground" instance=ExtResource("5_s0nni")]
+position = Vector2(-2, 606)
+
+[node name="Low" parent="World/Ground" instance=ExtResource("5_s0nni")]
+position = Vector2(-2, 632)
+
+[node name="Floor" type="StaticBody2D" parent="World/Ground"]
+position = Vector2(7.9999995, 648)
+scale = Vector2(-16.749, 100)
+
+[node name="Player" parent="World" instance=ExtResource("2_cpr0p")]
+unique_name_in_owner = true
+position = Vector2(48, 504)
+metadata/_edit_group_ = true
+
+[node name="Camera2D" type="Camera2D" parent="World/Player"]
+position = Vector2(0, -2)
+offset = Vector2(0, -259)
+limit_left = 0
+limit_top = 0
+position_smoothing_enabled = true
+editor_draw_limits = true
+script = ExtResource("3_cpr0p")
+
+[node name="FmodBankLoader" type="FmodBankLoader" parent="."]
+bank_paths = ["res://music/fmod/Mobile/Master.strings.bank", "res://music/fmod/Mobile/Master.bank"]
+
+[node name="FmodEventEmitter2D" type="FmodEventEmitter2D" parent="."]
+event_name = "event:/MainSong"
+event_guid = "{5e3dc658-32f6-4b1a-a050-8fb1eac60b93}"
+fmod_parameters/Stutter/id = -5799696294855748829
+fmod_parameters/Stutter = 0.0
+fmod_parameters/Stutter/variant_type = 3
+fmod_parameters/PitchShift/id = -5157426960461512288
+fmod_parameters/PitchShift = 0.0
+fmod_parameters/PitchShift/variant_type = 3
+fmod_parameters/LowPassCutoff/id = 7924135127220073405
+fmod_parameters/LowPassCutoff = 500.0
+fmod_parameters/LowPassCutoff/variant_type = 3
+fmod_parameters/Resonance/id = 9094596799579556167
+fmod_parameters/Resonance = 0.0
+fmod_parameters/Resonance/variant_type = 3
+fmod_parameters/ReverbDecay/id = -2385073031700651145
+fmod_parameters/ReverbDecay = 0.2
+fmod_parameters/ReverbDecay/variant_type = 3
+script = ExtResource("5_400sg")
+
+[node name="MusicTileFactory" type="Node2D" parent="."]
+script = ExtResource("11_3xj3m")
+
+[node name="MusicTileSpawner" type="Node" parent="." node_paths=PackedStringArray("tile_factory")]
+script = ExtResource("6_qy1jj")
+tile_factory = NodePath("../MusicTileFactory")
+player_path = NodePath("../World/Player")
+
+[node name="ResonanceBar" type="ProgressBar" parent="."]
+offset_right = 484.0
+offset_bottom = 27.0
+size_flags_horizontal = 4
+script = ExtResource("9_mcffj")
+
+[connection signal="timeline_beat" from="FmodEventEmitter2D" to="." method="_on_fmod_event_emitter_2d_timeline_beat"]
+[connection signal="timeline_marker" from="FmodEventEmitter2D" to="MusicTileSpawner" method="_on_fmod_event_emitter_2d_timeline_marker"]

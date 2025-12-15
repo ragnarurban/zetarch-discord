@@ -1,0 +1,82 @@
+[
+  {
+	"name": "Snare",
+	"lane": ["mid", "top"],
+	"time": 1239
+  },
+  {
+	"name": "Snare",
+	"lane": ["mid", "top"],
+	"time": 1869
+  },
+  {
+	"name": "Snare",
+	"lane": ["mid", "top"],
+	"time": 2386
+  },
+  {
+	"name": "Snare",
+	"lane": ["low", "mid"],
+	"time": 3108
+  },
+  {
+	"name": "Snare",
+	"lane": ["low", "mid"],
+	"time": 4340
+  },
+  {
+	"name": "Snare",
+	"lane": ["low", "mid"],
+	"time": 5594
+  },
+  {
+	"name": "Snare",
+	"lane": ["low", "mid"],
+	"time": 6819
+  },
+  {
+	"name": "Snare",
+	"lane": ["mid", "top"],
+	"time": 8065
+  },
+  {
+	"name": "Snare",
+	"lane": ["low", "mid"],
+	"time": 9283
+  },
+  {
+	"name": "Snare",
+	"lane": ["low", "mid"],
+	"time": 10522
+  },
+  {
+	"name": "Snare",
+	"lane": ["low", "mid"],
+	"time": 11705
+  },
+  {
+	"name": "BassHigh",
+	"lane": ["low", "mid"],
+	"time": 12356
+  },
+  {
+	"name": "BassHigh",
+	"lane": ["low", "mid"],
+	"time": 13008
+  },
+  {
+	"name": "BassHigh",
+	"lane": ["low", "mid"],
+	"time": 13553
+  },
+  {
+	"name": "BassHigh",
+	"lane": ["low", "mid"],
+	"time": 14205
+  },
+  {
+	"name": "BassHigh",
+	"lane": ["mid", "top"],
+	"time": 14785
+  }
+]

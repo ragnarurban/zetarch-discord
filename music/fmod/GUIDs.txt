@@ -1,0 +1,10 @@
+{fe674de6-ae6c-4e20-a433-cbdfcc7261da} bank:/Master
+{667a6d32-df17-0262-227a-41213d816742} bank:/Master.strings
+{0864e56e-ca2b-4b15-b0a8-79a0bc37d459} bus:/
+{8f8d1d3d-dae0-4902-8f48-5186c651c65c} bus:/Reverb
+{5e3dc658-32f6-4b1a-a050-8fb1eac60b93} event:/MainSong
+{ff4a0d63-8094-403f-aabd-b3ccf77c0f3c} parameter:/LowPassCutoff
+{f09e3874-5717-4b3c-909a-55b6c6208dc4} parameter:/PitchShift
+{e91d71c2-77c3-47ce-bb8b-4c3eee93b3ea} parameter:/Resonance
+{31cb19c9-9eb7-4b20-847b-1872b02e98fc} parameter:/ReverbDecay
+{9cc6f072-b0a7-42b0-82f3-d902729a22e9} parameter:/Stutter

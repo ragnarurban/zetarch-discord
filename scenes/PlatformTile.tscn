@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://crt133gmvr22o"]
+
+[ext_resource type="Texture2D" uid="uid://bnla5fxkyw8ip" path="res://art/Assets/Tiles.png" id="1_jfjbd"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jfjbd"]
+atlas = ExtResource("1_jfjbd")
+region = Rect2(0, 9, 80, 25)
+
+[node name="PlatformTile" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(587.99994, 0)
+scale = Vector2(14.7, 1)
+texture = SubResource("AtlasTexture_jfjbd")
