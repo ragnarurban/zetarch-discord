@@ -24,6 +24,7 @@ class_name MusicTile
 var resolved := false
 var is_active := false
 var is_idle := true
+var last_checked_buffer_time := -1.0
 
 ###############################################################################
 # READY
@@ -31,6 +32,10 @@ var is_idle := true
 
 func _ready():
 	add_to_group("music_tiles")
+
+	if Engine.is_editor_hint() == false:
+		var viz = HitWindowVisualizer.new()
+		add_child(viz)
 
 ###############################################################################
 # MOVEMENT
@@ -77,16 +82,34 @@ func try_resolve():
 		return
 
 	var buffer_time = GameState.player.get_buffer_time(required_action)
-	var result := GameState.rhythm_judge.evaluate(required_action, buffer_time, ideal_time)
-	print("Trying to resolve ", required_action, result)
+	
+	# No input → do nothing
+	if buffer_time < 0:
+		return
+
+	# Already evaluated this input
+	if buffer_time == last_checked_buffer_time:
+		return
+
+	last_checked_buffer_time = buffer_time
+
+	var result := GameState.rhythm_judge.evaluate(
+		required_action,
+		buffer_time,
+		ideal_time
+	)
+
+	print("Resolved", result, "delta:", buffer_time - ideal_time)
 
 	match result:
-		"perfect", "ok":
-			# Directly use Player.ActionType
+		"perfect_early", "perfect_late","ok_early", "ok_late":
+			print("Consumed input:", required_action)
+			GameState.player.consume_buffer(required_action)
 			GameState.player.try_execute_action(required_action)
 			resolve_hit()
 		"miss":
 			resolve_miss()
+
 
 ###############################################################################
 # RESOLUTION
@@ -99,7 +122,6 @@ func resolve_hit():
 func resolve_miss():
 	resolved = true
 	queue_free()
-
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if resolved:

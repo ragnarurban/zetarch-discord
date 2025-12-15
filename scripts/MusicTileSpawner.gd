@@ -25,6 +25,18 @@ class_name MusicTileSpawner
 	"SustainEnd":   {"type": "sustained_bass", "sustain_end": true}
 }
 
+const TILE_ACTION_MAP := {
+	"bass_high": Player.ActionType.JUMP,
+	"bass_double": Player.ActionType.JUMP,
+	"bass_low": Player.ActionType.JUMP,
+
+	"drum_kick": Player.ActionType.ATTACK,
+	"drum_snare": Player.ActionType.ATTACK,
+	"drum_hihat": Player.ActionType.ATTACK,
+
+	"bass_drum_combo": Player.ActionType.ATTACK
+}
+
 var tiles: Array = []
 var sustain_buffer: Dictionary = {}
 var song_start_time: float = 0.0
@@ -71,8 +83,15 @@ func _spawn_tile(tile_type: String, marker_time: float, lane_name: String):
 		return
 
 	var tile = tile_scene.instantiate()
-	tile.required_action = tile_type
-	tile.ideal_time = marker_time
+	print("A VER >", tile_type, TILE_ACTION_MAP.get(
+		tile_type,
+		Player.ActionType.JUMP
+	))
+	tile.required_action = TILE_ACTION_MAP.get(
+		tile_type,
+		Player.ActionType.JUMP
+	)
+	tile.ideal_time = marker_time / 1000.0
 	tile.lane_index = GameState.get_lane_index(lane_name)
 
 	# Y comes ONLY from lane
@@ -90,36 +109,6 @@ func _spawn_tile(tile_type: String, marker_time: float, lane_name: String):
 
 	add_child(tile)
 	tiles.append(tile)
-
-#func _spawn_tile(tile_type: String, marker_time: float):
-	#var tile_scene: PackedScene = tile_factory.get_scene(tile_type)
-	#if not tile_scene:
-		#push_error("Unknown tile type: %s" % tile_type)
-		#return
-	#var tile = tile_scene.instantiate()
-	#tile.tile_type = tile_type
-	#tile.ideal_time = marker_time
-	#tile.position.y = lane_map.get(tile_type, 300.0)
-	## Convert marker time from ms → seconds
-	#var marker_sec = marker_time / 1000.0
-	#var time_until_hit = marker_sec - song_start_time
-	#
-##
-	## Compute X so tile reaches player exactly at marker_time
-	## Tiles move left toward stationary player at scroll_speed
-	#var sprite := tile.get_node("Sprite2D")
-	#var final_size = sprite.texture.get_size() * sprite.global_scale
-	## add some space to let the player react, like a action window
-	#tile.position.x = %Player.global_position.x + 100 + (scroll_speed * time_until_hit)
-##
-	#add_child(tile)
-	##await get_tree().process_frame  # Wait until tile._ready() runs
-	##GameState.player.connect(
-		##"action_performed",
-		##Callable(tile, "_on_player_action")
-	##)
-	#tiles.append(tile)
-	##print("Spawned ",  tile, " at ", marker_time, tile_type)
 
 func _spawn_sustained_tile(tile_type: String, start_time: float, end_time: float):
 	pass

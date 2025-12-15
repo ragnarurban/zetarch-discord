@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://44lipphtd0ds"]
+[gd_scene load_steps=8 format=3 uid="uid://44lipphtd0ds"]
 
 [ext_resource type="Script" uid="uid://c6lw4oje3iydv" path="res://scripts/MusicTile.gd" id="1_avoo8"]
 [ext_resource type="Shader" uid="uid://ddtvfodswg38p" path="res://tiles/Tile.gdshader" id="2_65jei"]
 [ext_resource type="Texture2D" uid="uid://bnla5fxkyw8ip" path="res://art/Assets/Tiles.png" id="2_y3imo"]
+[ext_resource type="Script" uid="uid://s5uy5jqltg7d" path="res://scripts/HitWindowVisualizer.gd" id="4_65jei"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vp74t"]
 shader = ExtResource("2_65jei")
@@ -30,6 +31,9 @@ texture = SubResource("AtlasTexture_dgjlf")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(3, 5.5)
 shape = SubResource("RectangleShape2D_u0tg2")
+
+[node name="HitWindowVisualizer" type="Node2D" parent="."]
+script = ExtResource("4_65jei")
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

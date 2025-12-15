@@ -9,9 +9,7 @@ var available_events : Array = []
 var current_song_time := 0.0
 
 func _ready():
-	if not FmodHandler.instance:
-		push_error("FmodHandler not initialized! Add it to the scene first.")
-		return
+	pass
 
 	#music_instance = FmodServer.create_event_instance("event:/MainSong")
 	#FmodHandler.instance.play_event("event:/MainSong")
@@ -29,8 +27,6 @@ func get_current_song_time() -> float:
 	var result = music_instance.get_timeline_position()
 
 	return result / 1000.0
-
-
 
 func set_resonance(resonance: float) -> void:
 	resonance = clamp(resonance, 0.0, 1.0)

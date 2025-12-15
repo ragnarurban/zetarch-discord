@@ -45,28 +45,31 @@ func evaluate(action_type: Player.ActionType, buffer_time: float, ideal_time: fl
 	last_eval_time = AudioManager.get_current_song_time()
 	last_action = action_type
 
-	# No buffered input → miss
 	if buffer_time < 0:
 		last_diff = INF
 		_emit("miss", action_type, INF)
 		return "miss"
 
-	var diff = abs(buffer_time - ideal_time)
+	var delta := buffer_time - ideal_time
+	var diff: float = abs(delta)
 	last_diff = diff
+
+	var timing := "early" if delta < 0.0 else "late"
 
 	if diff <= perfect_window:
 		resonance_bar.add_perfect()
-		_emit("perfect", action_type, diff)
-		return "perfect"
+		_emit("perfect_" + timing, action_type, delta)
+		return "perfect_" + timing
 
 	if diff <= ok_window:
 		resonance_bar.add_ok()
-		_emit("ok", action_type, diff)
-		return "ok"
+		_emit("ok_" + timing, action_type, delta)
+		return "ok_" + timing
 
 	resonance_bar.add_miss()
-	_emit("miss", action_type, diff)
+	_emit("miss", action_type, delta)
 	return "miss"
+
 
 ###############################################################################
 # INTERNAL SIGNAL WRAPPER
@@ -76,10 +79,9 @@ func _emit(type: String, action_type: Player.ActionType, diff: float):
 	last_result = type
 	emit_signal("hit_judged", action_type, type, diff)
 
-	match type:
-		"perfect":
-			emit_signal("perfect", action_type)
-		"ok":
-			emit_signal("ok", action_type)
-		"miss":
-			emit_signal("miss", action_type)
+	if type.begins_with("perfect"):
+		emit_signal("perfect", action_type)
+	elif type.begins_with("ok"):
+		emit_signal("ok", action_type)
+	else:
+		emit_signal("miss", action_type)

@@ -162,7 +162,12 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_jfpux")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 8.0
 }, {
+"frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_61ith")
 }, {
@@ -176,7 +181,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_gv3ic")
 }],
 "loop": false,
-"name": &"attack",
+"name": &"attack2",
 "speed": 8.0
 }, {
 "frames": [{
@@ -306,7 +311,7 @@ script = ExtResource("8_khinc")
 [node name="Visual" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_priom")
-animation = &"dead"
+animation = &"attack2"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_cw2d6")

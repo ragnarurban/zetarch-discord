@@ -94,15 +94,6 @@ func _input(event):
 func _process(_delta):
 	_clear_expired_buffers()
 
-	if state == PlayerState.RUN:
-		if buffered_jump_time > 0 and GameState.is_action_allowed(ActionType.JUMP):
-			try_execute_action(ActionType.JUMP)
-			consume_buffer("jump")
-
-		if buffered_attack_time > 0 and GameState.is_action_allowed(ActionType.ATTACK):
-			try_execute_action(ActionType.ATTACK)
-			consume_buffer("attack")
-
 func _clear_expired_buffers():
 	var now := AudioManager.get_current_song_time()
 	if buffered_jump_time >= 0 and now - buffered_jump_time > input_buffer_len:
@@ -171,7 +162,6 @@ func try_execute_action(action: ActionType):
 		return
 	if not GameState.is_action_allowed(action):
 		return
-
 	match action:
 		ActionType.JUMP:
 			_execute_jump()
@@ -264,7 +254,7 @@ func get_buffer_time(action: ActionType) -> float:
 			return buffered_attack_time
 	return -1.0
 
-func consume_buffer(action: String):
+func consume_buffer(action: ActionType):
 	match action:
 		ActionType.JUMP:
 			buffered_jump_time = -1.0
