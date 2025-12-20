@@ -1,6 +1,6 @@
 extends StaticBody2D
 
-enum TileType { BASS_LOW, BASS_MID, BASS_HIGH }
+enum TileType {BASS_LOW, BASS_MID, BASS_HIGH}
 @export var tile_type: TileType
 @export var ideal_time: float # seconds
 @export var note_pitch: String = "C2"
@@ -8,7 +8,7 @@ enum TileType { BASS_LOW, BASS_MID, BASS_HIGH }
 var was_hit := false
 
 func on_player_land(_player = null):
-	print("HEY ")  
+	print("HEY ")
 	if was_hit:
 		return
 	was_hit = true
@@ -18,11 +18,11 @@ func on_player_land(_player = null):
 	
 	# +-80ms = 0.08 seconds
 	if time_error <= 0.08:
-		ResonanceMeter.add_perfect()
+		GameState.resonance_ui.add_perfect()
 		if has_node("Sprite2D"):
 			$Sprite2D.modulate = Color(0, 1, 0) # green flash
 	else:
-		ResonanceMeter.add_miss()
+		GameState.resonance_ui.add_miss()
 		AudioManager.trigger_stutter()
 		if has_node("Sprite2D"):
 			$Sprite2D.modulate = Color(1, 0, 0) # red flash

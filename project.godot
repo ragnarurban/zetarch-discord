@@ -23,12 +23,15 @@ config/icon="res://icon.svg"
 
 FmodManager="*res://addons/fmod/FmodManager.gd"
 AudioManager="*res://scripts/AudioManager.gd"
-ResonanceMeter="*res://scripts/ResonanceMeter.gd"
 GameState="*res://scripts/GameState.gd"
 
 [display]
 
-window/stretch/mode="viewport"
+window/size/viewport_width=408
+window/size/viewport_height=270
+window/size/window_width_override=1920
+window/size/window_height_override=1080
+window/stretch/mode="canvas_items"
 
 [editor_plugins]
 
@@ -79,4 +82,5 @@ dodge={
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="mobile"

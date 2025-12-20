@@ -3,17 +3,18 @@ extends Node
 var player: Player
 var current_lane := 1
 var rhythm_judge: RhythmHitJudge
+var resonance_ui: ResonanceBar
 
 const LANE := {
-	"low": 607.0,
-	"mid": 583.0,
-	"top": 555.0
+	"low": 305.0,
+	"mid": 280.0,
+	"top": 255.0
 }
 
 enum PlayerState {
-	IDLE,     # dialogs, pauses, cutscenes
-	RUN,      # normal rhythm gameplay
-	ACTION    # locked performing an action
+	IDLE, # dialogs, pauses, cutscenes
+	RUN, # normal rhythm gameplay
+	ACTION # locked performing an action
 }
 
 enum Phase {

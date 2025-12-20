@@ -12,14 +12,14 @@ class_name ResonanceBar
 @export_subgroup("Hit Bonuses")
 @export var perfect_gain: float = 3.0
 @export var ok_gain: float = 1.0
-@export var good_gain: float = 0.0    # “good” but neutral if you want
+@export var good_gain: float = 0.0 # “good” but neutral if you want
 
 @export_subgroup("Fail Penalties")
 @export var miss_penalty: float = 6.0
-@export var hit_penalty: float = 4.0   # collision penalty
+@export var hit_penalty: float = 4.0 # collision penalty
 
 @export_subgroup("Sustain Notes")
-@export var sustain_gain_rate: float = 2.5  # per second when held correctly
+@export var sustain_gain_rate: float = 2.5 # per second when held correctly
 @export var sustain_fail_penalty: float = 10.0
 
 @export_group("UI")
@@ -31,7 +31,7 @@ class_name ResonanceBar
 ###############################################################################
 
 var resonance: float
-var ui_resonance: float      # for smooth bar animation
+var ui_resonance: float # for smooth bar animation
 var is_dead := false
 
 ###############################################################################
@@ -39,7 +39,7 @@ var is_dead := false
 ###############################################################################
 
 signal resonance_changed(new_value: float)
-signal resonance_hit_feedback(kind: String)  # "perfect", "ok", "miss", etc.
+signal resonance_hit_feedback(kind: String) # "perfect", "ok", "miss", etc.
 signal resonance_depleted()
 
 ###############################################################################
@@ -49,10 +49,12 @@ signal resonance_depleted()
 func _ready():
 	resonance = starting_resonance
 	ui_resonance = resonance
+	
+	if (GameState.resonance_ui):
+		print("Shhhhh ", GameState.resonance_ui)
 
-	if has_node("ProgressBar"):
-		$ProgressBar.max_value = max_resonance
-		$ProgressBar.value = ui_resonance
+		GameState.resonance_ui.max_value = max_resonance
+		GameState.resonance_ui.value = ui_resonance
 
 	# Update FMOD driven systems
 	AudioManager.set_resonance(resonance / max_resonance)
@@ -67,8 +69,8 @@ func _process(delta):
 	else:
 		ui_resonance = resonance
 
-	if has_node("ProgressBar"):
-		$ProgressBar.value = ui_resonance
+	if (GameState.resonance_ui):
+		GameState.resonance_ui.value = ui_resonance
 
 ###############################################################################
 # API — ADD/REMOVE RESONANCE

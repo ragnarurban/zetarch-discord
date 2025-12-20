@@ -1,0 +1,36 @@
+[gd_scene load_steps=8 format=3 uid="uid://dvxu2nlwewh8h"]
+
+[ext_resource type="Script" uid="uid://c6lw4oje3iydv" path="res://scripts/MusicTile.gd" id="1_rp1qn"]
+[ext_resource type="Shader" uid="uid://ddtvfodswg38p" path="res://tiles/Tile.gdshader" id="2_caltq"]
+[ext_resource type="Texture2D" uid="uid://bnla5fxkyw8ip" path="res://art/Assets/Tiles.png" id="3_a2rgn"]
+[ext_resource type="Script" uid="uid://s5uy5jqltg7d" path="res://scripts/HitWindowVisualizer.gd" id="4_pr8ri"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vxylc"]
+shader = ExtResource("2_caltq")
+shader_parameter/line_color = Color(0.9607843, 0.5254902, 0.03529412, 1)
+shader_parameter/line_thickness = 2.000000095
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jgpv1"]
+atlas = ExtResource("3_a2rgn")
+region = Rect2(241, 257, 14, 15)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6eavs"]
+size = Vector2(16, 17)
+
+[node name="MusicTile" type="Node2D"]
+script = ExtResource("1_rp1qn")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_vxylc")
+position = Vector2(3, 5.25)
+scale = Vector2(1, 0.96666664)
+texture = SubResource("AtlasTexture_jgpv1")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(3, 5.5)
+shape = SubResource("RectangleShape2D_6eavs")
+
+[node name="HitWindowVisualizer" type="Node2D" parent="."]
+script = ExtResource("4_pr8ri")

@@ -1,18 +1,35 @@
 [gd_scene load_steps=8 format=3 uid="uid://def4i15qifhc0"]
 
 [ext_resource type="Script" uid="uid://c6lw4oje3iydv" path="res://scripts/MusicTile.gd" id="1_w2ofg"]
-[ext_resource type="Shader" uid="uid://ddtvfodswg38p" path="res://tiles/Tile.gdshader" id="2_dgjlf"]
 [ext_resource type="Texture2D" uid="uid://bnla5fxkyw8ip" path="res://art/Assets/Tiles.png" id="2_u0tg2"]
 [ext_resource type="Script" uid="uid://s5uy5jqltg7d" path="res://scripts/HitWindowVisualizer.gd" id="4_mpaqw"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_mpaqw"]
-shader = ExtResource("2_dgjlf")
-shader_parameter/line_color = Color(0.42352942, 0.99607843, 0.972549, 1)
-shader_parameter/line_thickness = 1.0
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_dgjlf"]
 atlas = ExtResource("2_u0tg2")
-region = Rect2(241, 352, 14, 17)
+region = Rect2(304, 352, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mpaqw"]
+atlas = ExtResource("2_u0tg2")
+region = Rect2(240, 352, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0kb3q"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dgjlf")
+}],
+"loop": true,
+"name": &"hurt",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mpaqw")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_u0tg2"]
 size = Vector2(16, 16)
@@ -21,10 +38,10 @@ size = Vector2(16, 16)
 script = ExtResource("1_w2ofg")
 required_action = 1
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-material = SubResource("ShaderMaterial_mpaqw")
-position = Vector2(3, 5)
-texture = SubResource("AtlasTexture_dgjlf")
+[node name="Sprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(8, 5)
+sprite_frames = SubResource("SpriteFrames_0kb3q")
+animation = &"idle"
 
 [node name="Area2D" type="Area2D" parent="."]
 
@@ -34,6 +51,8 @@ shape = SubResource("RectangleShape2D_u0tg2")
 
 [node name="HitWindowVisualizer" type="Node2D" parent="."]
 script = ExtResource("4_mpaqw")
+perfect_color = Color(0.3019608, 0.3372549, 0.6, 0.34901962)
+ok_color = Color(0.9997049, 0.77143764, 0.67044866, 0.2509804)
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

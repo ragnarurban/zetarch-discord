@@ -3,7 +3,6 @@ class_name Game
 
 @onready var audio_manager = AudioManager
 @onready var player: CharacterBody2D = $World/Player
-@onready var resonance_bar = $ResonanceBar
 @onready var music_spawner = $MusicTileSpawner
 @onready var forest: Parallax2D = $Background/Forest
 @onready var ground: Parallax2D = $World/Ground
@@ -12,16 +11,17 @@ class_name Game
 @onready var mountains_far: Parallax2D = $Background/MountainsFar
 @onready var clouds_close: Parallax2D = $Background/CloudsClose
 @onready var mountains_close: Parallax2D = $Background/MountainsClose
+@onready var resonance_ui: ResonanceBar = $FeedbackManager/ResonanceBar
 
 
 @export var background_scroll = {
-	"Sky": Vector2(-1,0),
-	"CloudsFar": Vector2(-10,0),
-	"MountainsFar": Vector2(-15,0),
-	"CloudsClose": Vector2(-20,0),
-	"MountainsClose": Vector2(-25,0),
-	"Forest": Vector2(-50,0),
-	"Ground": Vector2(-75,0)
+	"Sky": Vector2(-1, 0),
+	"CloudsFar": Vector2(-10, 0),
+	"MountainsFar": Vector2(-15, 0),
+	"CloudsClose": Vector2(-20, 0),
+	"MountainsClose": Vector2(-25, 0),
+	"Forest": Vector2(-50, 0),
+	"Ground": Vector2(-75, 0)
 }
 var rhythm_hit_judge: RhythmHitJudge
 
@@ -40,10 +40,11 @@ func _ready():
 	#music_spawner.resonance_system = resonance_bar
 	
 	# Register to RhythmHitJudge
-	GameState.rhythm_judge.resonance_bar = resonance_bar
+	GameState.resonance_ui = resonance_ui
 
 	# Reset resonance
-	AudioManager.set_resonance(resonance_bar.starting_resonance)
+	AudioManager.set_resonance(GameState.resonance_ui.starting_resonance)
+
 	
 	player.set_idle(true)
 	await get_tree().create_timer(3.0).timeout
@@ -67,7 +68,6 @@ func start_game():
 	
 	player.set_idle(false)
 	
-
 
 func _on_fmod_event_emitter_2d_timeline_beat(params: Dictionary) -> void:
 	print("HEY ", params)

@@ -21,6 +21,7 @@ class_name MusicTile
 # STATE
 ###############################################################################
 
+@onready var animated_sprite: AnimatedSprite2D = $Sprite2D
 var resolved := false
 var is_active := false
 var is_idle := true
@@ -32,10 +33,11 @@ var last_checked_buffer_time := -1.0
 
 func _ready():
 	add_to_group("music_tiles")
+	animated_sprite.play('idle')
 
-	if Engine.is_editor_hint() == false:
-		var viz = HitWindowVisualizer.new()
-		add_child(viz)
+	# if Engine.is_editor_hint() == false:
+	# 	var viz = HitWindowVisualizer.new()
+	# 	add_child(viz)
 
 ###############################################################################
 # MOVEMENT
@@ -102,7 +104,7 @@ func try_resolve():
 	print("Resolved", result, "delta:", buffer_time - ideal_time)
 
 	match result:
-		"perfect_early", "perfect_late","ok_early", "ok_late":
+		"perfect_early", "perfect_late", "ok_early", "ok_late":
 			print("Consumed input:", required_action)
 			GameState.player.consume_buffer(required_action)
 			GameState.player.try_execute_action(required_action)
@@ -117,10 +119,18 @@ func try_resolve():
 
 func resolve_hit():
 	resolved = true
+	animated_sprite.play("hit")
+	var anim_length = get_animation_length("hit")
+	print("animation length ", anim_length)
+	await get_tree().create_timer(anim_length / animated_sprite.speed_scale).timeout
+
 	queue_free()
 
 func resolve_miss():
 	resolved = true
+	animated_sprite.play("hit")
+	var anim_length = get_animation_length("hit")
+	await get_tree().create_timer(anim_length / animated_sprite.speed_scale).timeout
 	queue_free()
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
@@ -136,3 +146,10 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 func _on_area_2d_body_exited(body: Node2D) -> void:
 	if body == GameState.player:
 		is_active = false
+
+func get_animation_length(anim_name: String) -> float:
+	var frames = animated_sprite.sprite_frames.get_frame_count(anim_name)
+	var fps = animated_sprite.sprite_frames.get_animation_speed(anim_name)
+	if fps <= 0:
+		return 0.0
+	return frames / fps

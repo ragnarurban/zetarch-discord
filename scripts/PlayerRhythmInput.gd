@@ -6,9 +6,9 @@ class_name Player
 ###############################################################################
 
 enum PlayerState {
-	IDLE,     # dialogs, pauses, cutscenes
-	RUN,      # normal rhythm gameplay
-	ACTION    # locked performing an action
+	IDLE, # dialogs, pauses, cutscenes
+	RUN, # normal rhythm gameplay
+	ACTION # locked performing an action
 }
 
 var state: PlayerState = PlayerState.RUN
@@ -186,6 +186,17 @@ func _execute_jump():
 		play_anim("run")
 
 func _execute_attack():
+	state = PlayerState.ACTION
+	emit_signal("action_performed", ActionType.ATTACK)
+	play_anim("attack")
+
+	var anim_length = get_animation_length("attack")
+	await get_tree().create_timer(anim_length / visual.speed_scale).timeout
+	if state == PlayerState.ACTION:
+		state = PlayerState.RUN
+		play_anim("run")
+
+func _execute_hurt():
 	state = PlayerState.ACTION
 	emit_signal("action_performed", ActionType.ATTACK)
 	play_anim("attack")

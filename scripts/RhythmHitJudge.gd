@@ -5,14 +5,12 @@ class_name RhythmHitJudge
 # CONFIG
 ###############################################################################
 
-@export var perfect_window: float = 0.08    # ± 80 ms
-@export var ok_window: float = 0.15         # ± 150 ms
+@export var perfect_window: float = 0.08 # ± 80 ms
+@export var ok_window: float = 0.15 # ± 150 ms
 
 ###############################################################################
 # STATE
 ###############################################################################
-
-var resonance_bar: ResonanceBar
 
 # For debug UI
 var last_eval_time := 0.0
@@ -34,7 +32,7 @@ signal miss(action_type: String)
 ###############################################################################
 
 func _ready():
-	resonance_bar = get_tree().get_first_node_in_group("resonance_bar")
+	pass
 
 ###############################################################################
 # PUBLIC API
@@ -57,16 +55,16 @@ func evaluate(action_type: Player.ActionType, buffer_time: float, ideal_time: fl
 	var timing := "early" if delta < 0.0 else "late"
 
 	if diff <= perfect_window:
-		resonance_bar.add_perfect()
+		GameState.resonance_ui.add_perfect()
 		_emit("perfect_" + timing, action_type, delta)
 		return "perfect_" + timing
 
 	if diff <= ok_window:
-		resonance_bar.add_ok()
+		GameState.resonance_ui.add_ok()
 		_emit("ok_" + timing, action_type, delta)
 		return "ok_" + timing
 
-	resonance_bar.add_miss()
+	GameState.resonance_ui.add_miss()
 	_emit("miss", action_type, delta)
 	return "miss"
 
