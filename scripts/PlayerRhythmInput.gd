@@ -13,6 +13,7 @@ enum PlayerState {
 
 var state: PlayerState = PlayerState.RUN
 @onready var visual: AnimatedSprite2D = $Visual
+@onready var dust_particle: GPUParticles2D = $Dust
 
 ###############################################################################
 # CONFIG
@@ -65,7 +66,7 @@ enum ActionType {
 
 func _ready() -> void:
 	GameState.player = self
-	play_anim("run")
+	dust_particle.emitting = false
 
 ###############################################################################
 # INPUT (BUFFER ONLY)
@@ -176,6 +177,7 @@ func _execute_jump():
 	state = PlayerState.ACTION
 	jump_t = 0.0
 	is_fake_jumping = true
+	dust_particle.emitting = false
 	emit_signal("action_performed", ActionType.JUMP)
 	play_anim("jump")
 
@@ -184,9 +186,11 @@ func _execute_jump():
 	if state == PlayerState.ACTION:
 		state = PlayerState.RUN
 		play_anim("run")
+		dust_particle.emitting = true
 
 func _execute_attack():
 	state = PlayerState.ACTION
+	dust_particle.emitting = false
 	emit_signal("action_performed", ActionType.ATTACK)
 	play_anim("attack")
 
@@ -195,9 +199,11 @@ func _execute_attack():
 	if state == PlayerState.ACTION:
 		state = PlayerState.RUN
 		play_anim("run")
+		dust_particle.emitting = true
 
 func _execute_hurt():
 	state = PlayerState.ACTION
+	dust_particle.emitting = false
 	emit_signal("action_performed", ActionType.ATTACK)
 	play_anim("attack")
 
@@ -206,6 +212,7 @@ func _execute_hurt():
 	if state == PlayerState.ACTION:
 		state = PlayerState.RUN
 		play_anim("run")
+		dust_particle.emitting = true
 
 ###############################################################################
 # COYOTE TIME
@@ -235,9 +242,11 @@ func set_idle(enabled: bool):
 	if enabled:
 		state = PlayerState.IDLE
 		play_anim("idle")
+		dust_particle.emitting = false
 	else:
 		state = PlayerState.RUN
 		play_anim("run")
+		dust_particle.emitting = true
 
 ###############################################################################
 # FAKE JUMP ARC

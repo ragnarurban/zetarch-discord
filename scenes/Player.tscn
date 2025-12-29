@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://ch3tvarymcguc"]
+[gd_scene load_steps=53 format=3 uid="uid://ch3tvarymcguc"]
 
 [ext_resource type="Texture2D" uid="uid://belagd14e2ubc" path="res://art/Assets/Individual Sprites/adventurer-air-attack1-00.png" id="2_1jpwa"]
 [ext_resource type="Texture2D" uid="uid://cr4y8svdnarjx" path="res://art/Assets/Individual Sprites/adventurer-air-attack1-01.png" id="3_pfeki"]
@@ -46,6 +46,7 @@
 [ext_resource type="Texture2D" uid="uid://brnhnirws0fq5" path="res://art/Assets/Individual Sprites/adventurer-jump-01.png" id="33_7b437"]
 [ext_resource type="Texture2D" uid="uid://dqc1cyarw3i2c" path="res://art/Assets/Individual Sprites/adventurer-jump-02.png" id="34_8nyu3"]
 [ext_resource type="Texture2D" uid="uid://dbj6cxin1tlad" path="res://art/Assets/Individual Sprites/adventurer-jump-03.png" id="35_priom"]
+[ext_resource type="PackedScene" uid="uid://dtsqadmf4uwto" path="res://scenes/DustParticle.tscn" id="47_7b437"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_priom"]
 animations = [{
@@ -239,6 +240,22 @@ animations = [{
 radius = 13.0
 height = 50.0
 
+[sub_resource type="Gradient" id="Gradient_7puhw"]
+colors = PackedColorArray(0.7882353, 0.75686276, 0.70980394, 1, 1, 1, 1, 0.09019608)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_iaxc5"]
+gradient = SubResource("Gradient_7puhw")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_8nyu3"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 3.83
+inherit_velocity_ratio = 20.0
+gravity = Vector3(-30, 0, 0)
+scale_min = 0.099999994
+scale_max = 0.19999999
+color_ramp = SubResource("GradientTexture1D_iaxc5")
+
 [node name="CharacterBody2D" type="CharacterBody2D" groups=["player"]]
 visibility_layer = 8
 script = ExtResource("8_khinc")
@@ -246,9 +263,17 @@ script = ExtResource("8_khinc")
 [node name="Visual" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_priom")
-animation = &"jump"
+animation = &"run"
+frame_progress = 0.11856864
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_cw2d6")
+
+[node name="Dust" parent="." instance=ExtResource("47_7b437")]
+unique_name_in_owner = true
+position = Vector2(1, 16)
+amount = 5
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_8nyu3")
 
 [connection signal="animation_finished" from="Visual" to="." method="_on_visual_animation_finished"]

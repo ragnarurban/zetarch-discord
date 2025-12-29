@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://4k4poawjqira"
+path="res://.godot/imported/Super - Lyrics.mp3-82442f1d1e1e860a28a06d254fbc148a.mp3str"
+
+[deps]
+
+source_file="res://stems/Super - Lyrics.mp3"
+dest_files=["res://.godot/imported/Super - Lyrics.mp3-82442f1d1e1e860a28a06d254fbc148a.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

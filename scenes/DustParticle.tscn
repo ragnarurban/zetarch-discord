@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://dtsqadmf4uwto"]
+
+[ext_resource type="Texture2D" uid="uid://bqq8c3ctrvhp3" path="res://art/dustparticle.png" id="1_qdquy"]
+
+[sub_resource type="Gradient" id="Gradient_7puhw"]
+colors = PackedColorArray(0.7882353, 0.75686276, 0.70980394, 1, 1, 1, 1, 0.09019608)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_iaxc5"]
+gradient = SubResource("Gradient_7puhw")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_nbrhq"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 6.0
+inherit_velocity_ratio = 20.0
+gravity = Vector3(-5, 0, 0)
+scale_min = 0.099999994
+scale_max = 0.29999998
+color_ramp = SubResource("GradientTexture1D_iaxc5")
+
+[node name="Dust" type="GPUParticles2D"]
+texture = ExtResource("1_qdquy")
+lifetime = 0.6
+explosiveness = 0.8
+randomness = 0.8
+process_material = SubResource("ParticleProcessMaterial_nbrhq")

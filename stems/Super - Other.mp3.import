@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://garxpd3xj66q"
+path="res://.godot/imported/Super - Other.mp3-87bbc48b6306cabecf23fe70c437b083.mp3str"
+
+[deps]
+
+source_file="res://stems/Super - Other.mp3"
+dest_files=["res://.godot/imported/Super - Other.mp3-87bbc48b6306cabecf23fe70c437b083.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
