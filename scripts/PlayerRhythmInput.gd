@@ -48,6 +48,7 @@ var buffered_attack_time := -1.0
 var jump_t := 0.0
 var is_fake_jumping := false
 var current_anim := ""
+var input_queue : Array = []
 
 ###############################################################################
 # SIGNALS
@@ -73,20 +74,27 @@ func _ready() -> void:
 ###############################################################################
 
 func _input(event):
-	if state == PlayerState.IDLE:
+	if state != PlayerState.RUN:
 		return
 
-	var t := AudioManager.get_current_song_time()
-
+	var raw_time := AudioManager.get_current_song_time()
+	var corrected_time := raw_time + AudioManager.input_offset
+	
 	if event.is_action_pressed("ui_up"):
 		request_lane_change(current_lane + 1)
 	elif event.is_action_pressed("ui_down"):
 		request_lane_change(current_lane - 1)
 
 	if event.is_action_pressed("jump"):
-		buffered_jump_time = t
+		input_queue.append({
+			"action": ActionType.JUMP,
+			"time": corrected_time
+		})
 	if event.is_action_pressed("attack"):
-		buffered_attack_time = t
+		input_queue.append({
+			"action": ActionType.ATTACK,
+			"time": corrected_time
+		})
 
 ###############################################################################
 # BUFFER CLEANUP

@@ -7,8 +7,17 @@ class_name MusicTile
 
 @export var required_action: Player.ActionType
 @export var ideal_time: float
-@export var scroll_speed := 220.0
+@export var scroll_speed := 600.0
 @export var lane_index := 1
+
+enum TileIntent {
+	COLLECT,
+	ATTACK,
+	DEFEND,
+	DODGE,
+	SLIDE,
+	HOLD
+}
 
 ###############################################################################
 # HIT WINDOWS (delegate to judge, but keep for visuals)
@@ -16,6 +25,7 @@ class_name MusicTile
 
 @export var hit_window_ok := 0.15
 @export var hit_window_perfect := 0.08
+@export var HIT_X := 10.0 # PLAYER X position
 
 ###############################################################################
 # STATE
@@ -25,7 +35,6 @@ class_name MusicTile
 var resolved := false
 var is_active := false
 var is_idle := true
-var last_checked_buffer_time := -1.0
 
 ###############################################################################
 # READY
@@ -43,17 +52,21 @@ func _ready():
 # MOVEMENT
 ###############################################################################
 
-func _physics_process(delta):
-	if not is_idle:
-		position.x -= scroll_speed * delta
+func _physics_process(_delta):
+	if resolved:
+		return
 	
-	if is_active and not resolved:
-		try_resolve()
+	var song_time := AudioManager.get_current_song_time()
+	var dt := ideal_time - song_time
+	
+	if abs(dt) < 0.02:
+		print("NOTE AT HIT LINE", global_position.x)
+	
+	global_position.x = HIT_X + dt * scroll_speed
 
-	# Passed player → auto miss
-	if position.x < GameState.player.global_position.x - 40 and not resolved:
+	# auto miss
+	if dt < -GameState.rhythm_judge.ok_window:
 		resolve_miss()
-
 ###############################################################################
 # HIT ZONE LOGIC
 ###############################################################################
@@ -76,55 +89,8 @@ func _on_hit_area_body_exited(body):
 		is_active = false
 
 ###############################################################################
-# RHYTHM EVALUATION (CALLED BY JUDGE TICK OR INPUT)
-###############################################################################
-
-func try_resolve():
-	if resolved or not is_active:
-		return
-
-	var buffer_time = GameState.player.get_buffer_time(required_action)
-	
-	# No input → do nothing
-	if buffer_time < 0:
-		return
-
-	# Already evaluated this input
-	if buffer_time == last_checked_buffer_time:
-		return
-
-	last_checked_buffer_time = buffer_time
-
-	var result := GameState.rhythm_judge.evaluate(
-		required_action,
-		buffer_time,
-		ideal_time
-	)
-
-	print("Resolved", result, "delta:", buffer_time - ideal_time)
-
-	match result:
-		"perfect_early", "perfect_late", "ok_early", "ok_late":
-			print("Consumed input:", required_action)
-			GameState.player.consume_buffer(required_action)
-			GameState.player.try_execute_action(required_action)
-			resolve_hit()
-		"miss":
-			resolve_miss()
-
-
-###############################################################################
 # RESOLUTION
 ###############################################################################
-
-func resolve_hit():
-	resolved = true
-	animated_sprite.play("hit")
-	var anim_length = get_animation_length("hit")
-	print("animation length ", anim_length)
-	await get_tree().create_timer(anim_length / animated_sprite.speed_scale).timeout
-
-	queue_free()
 
 func resolve_miss():
 	resolved = true
@@ -153,3 +119,15 @@ func get_animation_length(anim_name: String) -> float:
 	if fps <= 0:
 		return 0.0
 	return frames / fps
+
+func on_resolved(result: String) -> void:
+	resolved = true
+
+	match result:
+		"perfect", "good", "ok":
+			animated_sprite.play("hit")
+		"miss":
+			animated_sprite.play("miss")
+
+	await animated_sprite.animation_finished
+	queue_free()

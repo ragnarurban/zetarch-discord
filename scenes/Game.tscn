@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=4 uid="uid://cxeylhmd4onja"]
+[gd_scene load_steps=22 format=4 uid="uid://cxeylhmd4onja"]
 
 [ext_resource type="Script" uid="uid://bjs2o5yjpd25j" path="res://scripts/Game.gd" id="1_qbsmt"]
 [ext_resource type="Texture2D" uid="uid://cidgla3oqkmoa" path="res://art/Background/sky.png" id="2_7ua8r"]
@@ -16,7 +16,6 @@
 [ext_resource type="Texture2D" uid="uid://bnla5fxkyw8ip" path="res://art/Assets/Tiles.png" id="9_vjgi4"]
 [ext_resource type="Script" uid="uid://q3elooi1s54w" path="res://scripts/MusicTileFactory.gd" id="11_3xj3m"]
 [ext_resource type="Script" uid="uid://dbuqc7o0rl6x3" path="res://scripts/FeedbackManager.gd" id="15_r7sob"]
-[ext_resource type="PackedScene" uid="uid://dor2oefhr7cpy" path="res://scenes/FeedbackUI.tscn" id="16_y5y3l"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vjgi4"]
 texture = ExtResource("8_y5y3l")
@@ -723,6 +722,7 @@ tile_set = SubResource("TileSet_kyk2p")
 
 [node name="Player" parent="World" instance=ExtResource("2_cpr0p")]
 unique_name_in_owner = true
+position = Vector2(10, 0)
 metadata/_edit_group_ = true
 
 [node name="FmodBankLoader" type="FmodBankLoader" parent="."]
@@ -765,7 +765,8 @@ script = ExtResource("3_cpr0p")
 
 [node name="FeedbackManager" type="CanvasLayer" parent="."]
 script = ExtResource("15_r7sob")
-feedback_scene = ExtResource("16_y5y3l")
+_offset = Vector2(10, -10)
+lifetime = 0.3
 
 [node name="ResonanceBar" type="ProgressBar" parent="FeedbackManager"]
 unique_name_in_owner = true
@@ -784,6 +785,12 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_vjgi4")
 value = 60.0
 show_percentage = false
 script = ExtResource("9_mcffj")
+
+[node name="FeedbackText" type="Label" parent="FeedbackManager"]
+offset_left = 95.0
+offset_top = 152.0
+offset_right = 237.0
+offset_bottom = 192.0
 
 [connection signal="timeline_beat" from="FmodEventEmitter2D" to="." method="_on_fmod_event_emitter_2d_timeline_beat"]
 [connection signal="timeline_marker" from="FmodEventEmitter2D" to="MusicTileSpawner" method="_on_fmod_event_emitter_2d_timeline_marker"]

@@ -41,6 +41,7 @@ var tiles: Array = []
 var sustain_buffer: Dictionary = {}
 var song_start_time: float = 0.0
 var fmod_markers := []
+var HIT_X := 10.0 # player X
 @export var is_idle := true
 @export var player_path: NodePath
 @onready var player: Player = get_node(player_path)
@@ -83,29 +84,24 @@ func _spawn_tile(tile_type: String, marker_time: float, lane_name: String):
 		return
 
 	var tile = tile_scene.instantiate()
-	print("A VER >", tile_type, TILE_ACTION_MAP.get(
-		tile_type,
-		Player.ActionType.JUMP
-	))
+		# Time math
+	var marker_sec := marker_time / 1000.0
+	var song_time := AudioManager.get_current_song_time()
+	var reaction_time := 0.18
+
 	tile.required_action = TILE_ACTION_MAP.get(
 		tile_type,
 		Player.ActionType.JUMP
 	)
-	tile.ideal_time = marker_time / 1000.0
+	tile.ideal_time = marker_sec
 	tile.lane_index = GameState.get_lane_index(lane_name)
+	
+	var dt :float = tile.ideal_time - song_time + reaction_time
 
 	# Y comes ONLY from lane
 	tile.global_position.y = GameState.get_lane_y(lane_name)
 
-	# Time math
-	var marker_sec := marker_time / 1000.0
-	var song_time := AudioManager.get_current_song_time()
-	var time_until_hit := marker_sec - song_time
-
-	# Reaction buffer (very important)
-	var reaction_time := 0.25
-
-	tile.global_position.x = player.global_position.x + scroll_speed * (time_until_hit + reaction_time )
+	tile.global_position.x = HIT_X + 9999 # offscreen
 
 	add_child(tile)
 	tiles.append(tile)

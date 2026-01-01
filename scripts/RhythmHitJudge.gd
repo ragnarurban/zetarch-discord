@@ -5,8 +5,9 @@ class_name RhythmHitJudge
 # CONFIG
 ###############################################################################
 
-@export var perfect_window: float = 0.08 # ± 80 ms
-@export var ok_window: float = 0.15 # ± 150 ms
+@export var perfect_window := 0.055
+@export var good_window := 0.090
+@export var ok_window := 0.140
 
 ###############################################################################
 # STATE
@@ -39,35 +40,39 @@ func _ready():
 # Central call for tiles and enemies
 ###############################################################################
 
-func evaluate(action_type: Player.ActionType, buffer_time: float, ideal_time: float) -> String:
-	last_eval_time = AudioManager.get_current_song_time()
-	last_action = action_type
+func resolve_tile(tile: MusicTile, input_time: float) -> void:
+	if tile.resolved:
+		return
 
-	if buffer_time < 0:
-		last_diff = INF
-		_emit("miss", action_type, INF)
-		return "miss"
+	var delta := input_time - tile.ideal_time
+	var abs_diff :float = abs(delta)
 
-	var delta := buffer_time - ideal_time
-	var diff: float = abs(delta)
-	last_diff = diff
+	var result := "miss"
 
-	var timing := "early" if delta < 0.0 else "late"
+	if abs_diff <= perfect_window:
+		result = "perfect"
+	elif abs_diff <= good_window:
+		result = "good"
+	elif abs_diff <= ok_window:
+		result = "ok"
 
-	if diff <= perfect_window:
-		GameState.resonance_ui.add_perfect()
-		_emit("perfect_" + timing, action_type, delta)
-		return "perfect_" + timing
+	# Apply result
+	match result:
+		"perfect":
+			GameState.resonance_ui.add_perfect()
+			GameState.player.try_execute_action(tile.required_action)
 
-	if diff <= ok_window:
-		GameState.resonance_ui.add_ok()
-		_emit("ok_" + timing, action_type, delta)
-		return "ok_" + timing
+		"good":
+			GameState.resonance_ui.add_ok()
+			GameState.player.try_execute_action(tile.required_action)
 
-	GameState.resonance_ui.add_miss()
-	_emit("miss", action_type, delta)
-	return "miss"
+		"ok":
+			GameState.resonance_ui.add_ok()
 
+		"miss":
+			GameState.resonance_ui.add_miss()
+
+	tile.on_resolved(result)
 
 ###############################################################################
 # INTERNAL SIGNAL WRAPPER
@@ -83,3 +88,28 @@ func _emit(type: String, action_type: Player.ActionType, diff: float):
 		emit_signal("ok", action_type)
 	else:
 		emit_signal("miss", action_type)
+
+func judge_input(action, input_time):
+	var best_tile = null
+	var best_diff = INF
+	
+	for tile in get_tree().get_nodes_in_group("music_tiles"):
+		if tile.resolved:
+			continue
+		if tile.required_action != action:
+			continue
+		if tile.lane_index != GameState.player.current_lane:
+			continue
+
+		var diff :float = input_time - tile.ideal_time
+		var abs_diff :float = abs(diff)
+
+		if abs_diff < best_diff:
+			best_diff = abs_diff
+			best_tile = tile
+
+	if best_tile == null:
+		GameState.resonance_ui.add_miss()
+		return
+
+	resolve_tile(best_tile, input_time)

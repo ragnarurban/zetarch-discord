@@ -11,6 +11,13 @@ const LANE := {
 	"top": 255.0
 }
 
+enum RhythmResult {
+	PERFECT,
+	OK,
+	LATE,
+	MISS
+}
+
 enum PlayerState {
 	IDLE, # dialogs, pauses, cutscenes
 	RUN, # normal rhythm gameplay
@@ -73,3 +80,25 @@ func set_phase(new_phase: Phase):
 
 func _ready() -> void:
 	rhythm_judge = RhythmHitJudge.new()
+
+func resolve_rhythm_event(tile: MusicTile, result: RhythmResult):
+	###
+	#Responsibilities:
+	##Apply resonance changes
+	##Tell player to animate
+	##Tell tile what animation to play
+	##Trigger screen shake / VFX
+	##Trigger FMOD stutter or effects
+	###
+	match result:
+		0: # Perfect
+			#player.try_execute_action(tile.required_action)
+			#resonance_ui.add_perfect()
+			pass
+		1: # OK
+			pass
+		2: # LATE
+			pass
+		3: # MISS
+			pass
+	pass
